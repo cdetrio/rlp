@@ -112,12 +112,9 @@ function _decode (input) {
   }
 }
 
-function intToHex (i) {
-  var hex = i.toString(16);
-  if (hex.length % 2) {
-    hex = '0' + hex;
-  }
-  return hex;
+function isNumber(value) {
+   return typeof value === 'number' &&
+   isFinite(value);
 }
 
 function toBuffer (input) {
@@ -129,10 +126,15 @@ function toBuffer (input) {
     }
   } else if (input === null || input === 0 || input === undefined) {
     return new Buffer(0);
-  } else if (!isNaN(input)) {
+  //} else if (!isNaN(input)) { //isNaN is false for hex strings ("0x..")
+  } else if (isNumber(input)) {
     var hex = intToHex(input);
     return new Buffer(hex, 'hex');
   } else if (!Buffer.isBuffer(input)) {
-    return new Buffer(input.toString());
+    if (input.toString().slice(0,2) === "0x") {
+      return new Buffer(input.toString().slice(2), 'hex');
+    } else {
+      return new Buffer(input.toString());
+    }
   }
 }
