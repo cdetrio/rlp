@@ -112,6 +112,14 @@ function _decode (input) {
   }
 }
 
+function intToHex (i) {
+  var hex = i.toString(16);
+  if (hex.length % 2) {
+    hex = '0' + hex;
+  }
+  return hex;
+}
+
 function isNumber(value) {
    return typeof value === 'number' &&
    isFinite(value);
